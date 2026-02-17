@@ -23,7 +23,6 @@ class Tensor:
 class Operator:
     def __call__(self, *inputs):
         '''
-
         Args:
             *inputs: 被operator操作的tensor的集合
 
@@ -32,7 +31,7 @@ class Operator:
         '''
         # 多态执行前向计算的同时记录被操作的tensor
         outputs = self.forward(*inputs)
-        # 标记需要梯度的输入
+        # 只要有一个需要梯度，就要向下执行，不需要反向变量就会被剪枝了。
         requires_grad = any(i.requires_grad for i in inputs)
         if requires_grad:
             # 输出的结果中，将自己绑定在output tensor中
